@@ -3,48 +3,44 @@
 var gulp = require('gulp');
 var connect = require('gulp-connect');
 var useref = require('gulp-useref');
-var watch = require('gulp-watch');
+var del = require('del');
 
 // =============================================================================
 //                            Development
 // =============================================================================
 
 // build the tmp folder that is where things are actually served from in development
-gulp.task('tmp', ['html', 'css', 'js', 'vendor'], function() {
-});
+gulp.task('tmp', ['vendor', 'css', 'js']);
 
-  gulp.task('html', function() {
-    gulp.src('app/index.html')
-      .pipe(gulp.dest('tmp'));
+  gulp.task('clean', function(cb) {
+    return del(['tmp']);
   });
 
   // compile js
-  gulp.task('js', function() {
-    gulp.src('app/scripts/main.js')
+  gulp.task('js', ['clean'], function() {
+    gulp.src('app/scripts/*.js')
       .pipe(gulp.dest('tmp'));
   });
 
   // compile css
-  gulp.task('css', function() {
-    gulp.src('app/styles/*')
+  gulp.task('css', ['clean'], function() {
+    gulp.src('app/styles/**/*')
       .pipe(gulp.dest('tmp/styles'));
   });
 
   // compile vendor files
-  gulp.task('vendor', function() {
+  gulp.task('vendor', ['clean'], function() {
     var assets = useref.assets();
-    return gulp.src('app/*.html')
+    return gulp.src('app/index.html')
       .pipe(assets)
       .pipe(assets.restore())
       .pipe(useref())
       .pipe(gulp.dest('tmp'));
   });
 
-// make watch tasks that watches src code and compiles it into tmp (calls appropriate above task)
+// make watch task that watches src code and compiles it into tmp
 gulp.task('watch', function() {
-  gulp.watch('app/scripts/**/*.js', ['js']);
-  gulp.watch('app/styles/**/*.css', ['css']);
-  gulp.watch('app/index.html', ['vendor']);
+  gulp.watch(['app/**/*'], ['tmp']);
 });
 
 // make a connect task that makes and connects to server that loads static files from tmp
