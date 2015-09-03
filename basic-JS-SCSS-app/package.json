@@ -8,8 +8,8 @@
   },
   "devDependencies": {
     "connect": "^3.4.0",
-    "connect-livereload": "^0.5.3",
     "gulp": "^3.9.0",
+    "gulp-livereload": "^3.8.0",
     "gulp-useref": "^1.3.0",
     "http": "0.0.0",
     "serve-index": "^1.7.2",
@@ -19,5 +19,5 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "nicerhugs",
-  "license": "ISC"
+  "license": "MIT"
 }

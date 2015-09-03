@@ -2,11 +2,11 @@
 
 var gulp = require('gulp');
 var connect = require('connect');
-var reload = require('connect-livereload');
 var http = require('http');
 var serveStatic = require('serve-static');
 var serveIndex = require('serve-index');
 var useref = require('gulp-useref');
+var reload = require('gulp-livereload');
 
 
 // =============================================================================
@@ -14,7 +14,7 @@ var useref = require('gulp-useref');
 // =============================================================================
 
 // build the tmp folder that is where things are actually served from in development
-gulp.task('tmp', ['html', 'js', 'vendorJS', 'css'], function() {
+gulp.task('tmp', ['html', 'js', 'vendor', 'scss'], function() {
 });
 
   gulp.task('html', function() {
@@ -44,7 +44,6 @@ gulp.task('tmp', ['html', 'js', 'vendorJS', 'css'], function() {
   });
 
 // make watch tasks that watches src code and compiles it into tmp (calls appropriate above task)
-
 gulp.task('watch', function() {
   gulp.watch('app/scripts/**/*.js', ['js']);
   gulp.watch('app/styles/**/*.scss', ['scss']);
@@ -58,9 +57,12 @@ gulp.task('connect', function () {
   http.createServer(app).listen(3000);
 });
 
-// make a reload task that watches the tmp folder for changes and reloads the server
+// make a default task that starts the watch task, starts the connect task, and then starts the reload task
+gulp.task('default', ['tmp', 'watch', 'connect'], function() {
+  reload.listen();
+  gulp.watch('tmp/*').on('change', reload.changed)
+});
 
-// make a serve task that starts the watch task, starts the connect task, and then starts the reload task
 // make a clean task that kills the tmp folder when the server stops running?
 
 // =============================================================================
