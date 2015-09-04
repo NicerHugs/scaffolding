@@ -5,6 +5,7 @@ var connect = require('gulp-connect');
 var useref = require('gulp-useref');
 var del = require('del');
 var concat = require('gulp-concat');
+var babel = require('gulp-babel');
 
 // =============================================================================
 //                            Development
@@ -21,6 +22,7 @@ gulp.task('tmp', ['vendor', 'css', 'js']);
   gulp.task('js', ['clean'], function () {
     return gulp.src('app/scripts/**/*.js')
       .pipe(concat('main.js'))
+      .pipe(babel())
       .pipe(gulp.dest('tmp'));
   });
 
