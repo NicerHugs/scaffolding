@@ -4,6 +4,7 @@ var gulp = require('gulp');
 var connect = require('gulp-connect');
 var useref = require('gulp-useref');
 var del = require('del');
+var concat = require('gulp-concat');
 
 // =============================================================================
 //                            Development
@@ -17,19 +18,20 @@ gulp.task('tmp', ['vendor', 'css', 'js']);
   });
 
   // compile js
-  gulp.task('js', ['clean'], function() {
-    gulp.src('app/scripts/*.js')
+  gulp.task('js', ['clean'], function () {
+    return gulp.src('app/scripts/**/*.js')
+      .pipe(concat('main.js'))
       .pipe(gulp.dest('tmp'));
   });
 
   // compile css
-  gulp.task('css', ['clean'], function() {
+  gulp.task('css', ['vendor'], function() {
     gulp.src('app/styles/**/*')
       .pipe(gulp.dest('tmp/styles'));
   });
 
   // compile vendor files
-  gulp.task('vendor', ['clean'], function() {
+  gulp.task('vendor', ['js'], function() {
     var assets = useref.assets();
     return gulp.src('app/index.html')
       .pipe(assets)
